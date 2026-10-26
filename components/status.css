@@ -1,0 +1,43 @@
+/* Status Badge · Figma: Компоненты / Status Badge
+   Type=Alarm|Warning|Task|Ok|Offline|AI → .ds-badge--alarm|--warning|--task|--ok|--offline|--ai
+   Цвет не единственный носитель смысла: текст статуса обязателен. */
+.ds-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-2) var(--space-8);
+  border-radius: var(--radius-full);
+  font: 600 11px/16px "Inter", system-ui, sans-serif;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--badge-fg);
+  background: var(--badge-bg);
+}
+.ds-badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.ds-badge--alarm   { --badge-fg: var(--color-status-alarm-fg);   --badge-bg: var(--color-status-alarm-bg); }
+.ds-badge--warning { --badge-fg: var(--color-status-warning-fg); --badge-bg: var(--color-status-warning-bg); }
+.ds-badge--task    { --badge-fg: var(--color-status-task-fg);    --badge-bg: var(--color-status-task-bg); }
+.ds-badge--ok      { --badge-fg: var(--color-status-ok-fg);      --badge-bg: var(--color-status-ok-bg); }
+.ds-badge--offline { --badge-fg: var(--color-status-offline-fg); --badge-bg: var(--color-status-offline-bg); }
+.ds-badge--ai      { --badge-fg: var(--color-ai-fg);             --badge-bg: var(--color-ai-bg); }
+
+/* Toast · Figma: Компоненты / Toast · Type=Success|Error|Info */
+.ds-toast {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  max-width: 380px;
+  padding: var(--space-12) var(--space-16);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-inverse);
+  color: var(--color-text-inverse);
+  box-shadow: 0 8px 24px rgb(23 24 28 / 0.14);
+  font: 400 14px/20px "Inter", system-ui, sans-serif;
+}
+.ds-toast svg { width: 20px; height: 20px; flex: none; }
+.ds-toast--success svg { color: var(--color-status-ok-fg); }
+.ds-toast--error svg { color: var(--color-status-alarm-fg); }
+.ds-toast--info svg { color: var(--color-accent-default); }
+.ds-toast__text { flex: 1; }
+.ds-toast__action { font-weight: 500; opacity: 0.8; background: none; border: 0; color: inherit; cursor: pointer; padding: 0; }

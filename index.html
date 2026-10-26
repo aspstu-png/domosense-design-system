@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DomoSense Design System</title>
+<meta name="description" content="Токены и компоненты диспетчерской DomoSense: код, синхронизированный с Figma.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="dist/tokens.css">
+<link rel="stylesheet" href="components/button.css">
+<link rel="stylesheet" href="components/input.css">
+<link rel="stylesheet" href="components/status.css">
+<link rel="stylesheet" href="components/dashboard.css">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--color-bg-canvas); color: var(--color-text-primary); font: 400 14px/20px "Inter", system-ui, sans-serif; }
+  .page { max-width: 1240px; margin: 0 auto; padding: var(--space-32) max(16px, env(safe-area-inset-left)); display: grid; gap: var(--space-48); }
+  .top { display: flex; justify-content: space-between; align-items: center; gap: var(--space-16); flex-wrap: wrap; }
+  section { display: grid; gap: var(--space-16); }
+  .panel { background: var(--color-bg-surface); border: 1px solid var(--color-border-default); border-radius: var(--radius-lg); padding: var(--space-24); display: grid; gap: var(--space-24); }
+  .row { display: flex; flex-wrap: wrap; gap: var(--space-12); align-items: center; }
+  .caption { color: var(--color-text-secondary); }
+  .states { display: grid; grid-template-columns: 120px repeat(6, auto); gap: var(--space-12); align-items: center; overflow-x: auto; }
+  .states .caption { white-space: nowrap; }
+  .grid-fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-16); }
+  .feed { border: 1px solid var(--color-border-default); border-radius: var(--radius-lg); overflow: hidden; }
+  .cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-16); }
+  @media (max-width: 1024px) { .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 560px) { .cards { grid-template-columns: 1fr; } .states { grid-template-columns: 90px repeat(6, auto); } }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-door" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v17"/><path d="M3 21h18"/><path d="M15 12h.01"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></symbol>
+  </defs>
+</svg>
+
+<main class="page">
+  <header class="top">
+    <div>
+      <div class="ds-text-label caption">DomoSense Design System · v1.0</div>
+      <h1 class="ds-text-display" style="margin:4px 0 0">Токены и компоненты</h1>
+      <p class="caption" style="margin:4px 0 0">Код синхронизирован с Figma: цвета, отступы и текстовые стили генерируются из переменных файла.</p>
+    </div>
+    <button class="ds-button ds-button--secondary" type="button" id="theme">Тёмная тема</button>
+  </header>
+
+  <section>
+    <h2 class="ds-text-heading-h2" style="margin:0">Button · 4 стиля × 6 состояний</h2>
+    <div class="panel">
+      <div class="states" role="table" aria-label="Состояния кнопки">
+        <span></span><span class="caption">Default</span><span class="caption">Hover</span><span class="caption">Pressed</span><span class="caption">Focus</span><span class="caption">Disabled</span><span class="caption">Loading</span>
+        <span class="caption">Primary</span>
+        <button class="ds-button ds-button--primary">Кнопка</button><button class="ds-button ds-button--primary" style="background:var(--color-accent-hover)">Кнопка</button><button class="ds-button ds-button--primary" style="background:var(--color-accent-pressed)">Кнопка</button><button class="ds-button ds-button--primary" style="outline:2px solid var(--color-focus-ring);outline-offset:2px">Кнопка</button><button class="ds-button ds-button--primary" disabled>Кнопка</button><button class="ds-button ds-button--primary" aria-busy="true">Выполняется…</button>
+        <span class="caption">Secondary</span>
+        <button class="ds-button ds-button--secondary">Кнопка</button><button class="ds-button ds-button--secondary" style="background:var(--color-bg-subtle)">Кнопка</button><button class="ds-button ds-button--secondary" style="background:var(--color-border-default)">Кнопка</button><button class="ds-button ds-button--secondary" style="outline:2px solid var(--color-focus-ring);outline-offset:2px">Кнопка</button><button class="ds-button ds-button--secondary" disabled>Кнопка</button><button class="ds-button ds-button--secondary" aria-busy="true">Выполняется…</button>
+        <span class="caption">Ghost</span>
+        <button class="ds-button ds-button--ghost">Кнопка</button><button class="ds-button ds-button--ghost" style="background:var(--color-bg-subtle)">Кнопка</button><button class="ds-button ds-button--ghost" style="background:var(--color-border-default)">Кнопка</button><button class="ds-button ds-button--ghost" style="outline:2px solid var(--color-focus-ring);outline-offset:2px">Кнопка</button><button class="ds-button ds-button--ghost" disabled>Кнопка</button><button class="ds-button ds-button--ghost" aria-busy="true">Выполняется…</button>
+        <span class="caption">Danger</span>
+        <button class="ds-button ds-button--danger">Отвязать</button><button class="ds-button ds-button--danger" style="background:var(--color-status-alarm-fg)">Отвязать</button><button class="ds-button ds-button--danger" style="background:var(--color-status-alarm-fg)">Отвязать</button><button class="ds-button ds-button--danger" style="outline:2px solid var(--color-focus-ring);outline-offset:2px">Отвязать</button><button class="ds-button ds-button--danger" disabled>Отвязать</button><button class="ds-button ds-button--danger" aria-busy="true">Выполняется…</button>
+      </div>
+      <div class="row">
+        <button class="ds-button ds-button--primary" type="button" id="demo-cmd"><svg><use href="#i-door"/></svg>Открыть двери</button>
+        <span class="caption">Нажмите: кнопка перейдёт в Loading, затем покажет результат команды.</span>
+      </div>
+      <div id="toast-slot" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="ds-text-heading-h2" style="margin:0">Input · валидация на месте</h2>
+    <div class="panel grid-fields">
+      <label class="ds-field" id="f-threshold">
+        <span class="ds-field__label">Тревога, если больше</span>
+        <span class="ds-field__control"><input class="ds-field__input" id="threshold" inputmode="decimal" value="−5" aria-describedby="threshold-help"><span class="ds-field__unit">°C</span></span>
+        <span class="ds-field__helper" id="threshold-help">Тревога сработает выше этого значения</span>
+      </label>
+      <label class="ds-field">
+        <span class="ds-field__label">Склеивать повторы в течение</span>
+        <span class="ds-field__control"><input class="ds-field__input" id="aggregate" value="15"><span class="ds-field__unit">мин</span></span>
+        <span class="ds-field__helper">Повторные срабатывания станут одним инцидентом</span>
+      </label>
+      <label class="ds-field ds-field--disabled">
+        <span class="ds-field__label">Модель устройства</span>
+        <span class="ds-field__control"><input class="ds-field__input" id="model" value="Лифт КМЗ" disabled></span>
+        <span class="ds-field__helper">Берётся из шаблона</span>
+      </label>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="ds-text-heading-h2" style="margin:0">Status Badge</h2>
+    <div class="panel row">
+      <span class="ds-badge ds-badge--alarm">Тревога</span><span class="ds-badge ds-badge--warning">Предупреждение</span><span class="ds-badge ds-badge--task">Задача</span><span class="ds-badge ds-badge--ok">Отработано</span><span class="ds-badge ds-badge--offline">Нет связи</span><span class="ds-badge ds-badge--ai">AI-подсказка</span>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="ds-text-heading-h2" style="margin:0">Экран: дашборд диспетчера</h2>
+    <p class="caption" style="margin:0">Адаптив как в Figma: 4 колонки на десктопе, 2 на планшете, 1 на телефоне.</p>
+    <div class="feed" role="list" aria-label="Требуют реакции">
+      <a class="ds-row" role="listitem" href="#"><span class="ds-badge ds-badge--alarm">Тревога</span><span class="ds-row__main"><span class="ds-row__title">Двери не открываются</span><span class="ds-row__object">Лифт КМЗ №2463 · ул. Солнечная, 12, подъезд 2</span></span><span class="ds-row__time">2 мин</span><svg><use href="#i-chevron"/></svg></a>
+      <a class="ds-row" role="listitem" href="#"><span class="ds-badge ds-badge--offline">Нет связи</span><span class="ds-row__main"><span class="ds-row__title">Нет данных 12 минут</span><span class="ds-row__object">Счётчик ИТП · ул. Лесная, 3</span></span><span class="ds-row__time">12 мин</span><svg><use href="#i-chevron"/></svg></a>
+      <a class="ds-row" role="listitem" href="#"><span class="ds-badge ds-badge--warning">Предупреждение</span><span class="ds-row__main"><span class="ds-row__title">Давление ниже нормы</span><span class="ds-row__object">Водоснабжение, ИТП · ул. Лесная, 3</span></span><span class="ds-row__time">18 мин</span><svg><use href="#i-chevron"/></svg></a>
+    </div>
+    <div class="cards" id="cards"></div>
+  </section>
+</main>
+
+<script>
+  const CARDS = [["Лифты",3,6,18],["Вентиляция",2,5,7],["Водоснабжение",1,8,"999+"],["Пожарная сигнализация",0,3,11],["Электроснабжение",0,2,9],["СКУД",0,1,4],["Видеонаблюдение",0,0,2],["Освещение",0,5,8],["Водоотведение",0,0,0]];
+  const counter = (type, v, label) => `<button class="ds-counter ds-counter--${type}" data-value="${v}" type="button" aria-label="${label}: ${v}"><span class="ds-counter__value">${v}</span><span class="ds-counter__label">${label}</span></button>`;
+  document.getElementById("cards").innerHTML = CARDS.map(([t,a,w,k]) => `
+    <article class="ds-card">
+      <div class="ds-card__head">${t}<svg width="16" height="16"><use href="#i-chevron"/></svg></div>
+      <div class="ds-card__counters">${counter("alarm",a,"тревоги")}${counter("warning",w,"предупр.")}${counter("task",k,"задачи")}</div>
+      ${a+w+k===0 ? '<div class="ds-card__note">Всё спокойно · обновлено 1 мин назад</div>' : ""}
+    </article>`).join("");
+
+  // Theme toggle
+  const themeBtn = document.getElementById("theme");
+  const setTheme = (t) => { document.documentElement.dataset.theme = t; themeBtn.textContent = t === "dark" ? "Светлая тема" : "Тёмная тема"; };
+  themeBtn.addEventListener("click", () => setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark"));
+
+  // Loading → result demo
+  const cmd = document.getElementById("demo-cmd"), slot = document.getElementById("toast-slot");
+  let ok = true;
+  cmd.addEventListener("click", () => {
+    cmd.setAttribute("aria-busy", "true"); cmd.disabled = true; cmd.lastChild.textContent = "Выполняется…";
+    setTimeout(() => {
+      cmd.removeAttribute("aria-busy"); cmd.disabled = false; cmd.lastChild.textContent = ok ? "Открыть двери" : "Повторить";
+      slot.innerHTML = ok
+        ? '<div class="ds-toast ds-toast--success"><svg><use href="#i-check"/></svg><span class="ds-toast__text">Команда «Открыть двери» выполнена</span><button class="ds-toast__action" type="button">Отменить</button></div>'
+        : '<div class="ds-toast ds-toast--error"><svg><use href="#i-alert"/></svg><span class="ds-toast__text">Устройство не ответило. Проверьте связь и повторите</span><button class="ds-toast__action" type="button">Повторить</button></div>';
+      ok = !ok;
+    }, 1400);
+  });
+
+  // Inline validation
+  const th = document.getElementById("threshold"), thField = document.getElementById("f-threshold"), thHelp = document.getElementById("threshold-help");
+  const validate = () => {
+    const v = parseFloat(th.value.replace("−", "-").replace(",", "."));
+    const bad = isNaN(v) || v <= 0;
+    thField.classList.toggle("ds-field--error", bad);
+    th.setAttribute("aria-invalid", bad);
+    thHelp.textContent = bad ? "Значение должно быть больше 0 °C" : "Тревога сработает выше этого значения";
+  };
+  th.addEventListener("input", validate); validate();
+</script>
+</body>
+</html>

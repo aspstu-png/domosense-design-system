@@ -1,0 +1,60 @@
+/* Button · Figma: Компоненты / Button
+   Style=Primary|Secondary|Ghost|Danger → .ds-button--primary|--secondary|--ghost|--danger
+   State=Hover/Pressed/Focus → :hover / :active / :focus-visible
+   State=Disabled → [disabled]
+   State=Loading → [aria-busy="true"] */
+.ds-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-8);
+  min-height: 40px;
+  padding: var(--space-8) var(--space-16);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  font: 500 14px/20px "Inter", system-ui, sans-serif;
+  cursor: pointer;
+  transition: background-color 0.12s ease, border-color 0.12s ease;
+  white-space: nowrap;
+}
+.ds-button svg { width: 18px; height: 18px; flex: none; }
+.ds-button:focus-visible { outline: 2px solid var(--color-focus-ring); outline-offset: 2px; }
+
+.ds-button--primary { background: var(--color-accent-default); color: var(--color-text-on-accent); }
+.ds-button--primary:hover { background: var(--color-accent-hover); }
+.ds-button--primary:active { background: var(--color-accent-pressed); }
+
+.ds-button--secondary { background: var(--color-bg-surface); color: var(--color-text-primary); border-color: var(--color-border-strong); }
+.ds-button--secondary:hover { background: var(--color-bg-subtle); }
+.ds-button--secondary:active { background: var(--color-border-default); }
+
+.ds-button--ghost { background: transparent; color: var(--color-accent-default); }
+.ds-button--ghost:hover { background: var(--color-bg-subtle); }
+.ds-button--ghost:active { background: var(--color-border-default); }
+
+.ds-button--danger { background: var(--color-status-alarm-solid); color: var(--color-text-on-accent); }
+.ds-button--danger:hover,
+.ds-button--danger:active { background: var(--color-status-alarm-fg); }
+
+.ds-button--block { width: 100%; }
+
+.ds-button[disabled] {
+  background: var(--color-bg-subtle);
+  color: var(--color-text-secondary);
+  border-color: var(--color-border-default);
+  cursor: not-allowed;
+}
+.ds-button--ghost[disabled] { background: transparent; border-color: transparent; }
+
+.ds-button[aria-busy="true"] { cursor: progress; }
+.ds-button[aria-busy="true"]::before {
+  content: "";
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  animation: ds-spin 0.8s linear infinite;
+}
+@keyframes ds-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .ds-button[aria-busy="true"]::before { animation: none; } }

@@ -1,0 +1,35 @@
+/* Input · Figma: Компоненты / Input
+   State=Default|Focus|Filled|Error|Disabled
+   Error → .ds-field--error + aria-invalid="true" на input; текст ошибки в .ds-field__helper */
+.ds-field { display: grid; gap: var(--space-4); }
+.ds-field__label { font: 500 14px/20px "Inter", system-ui, sans-serif; color: var(--color-text-primary); }
+.ds-field__control {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  min-height: 40px;
+  padding: var(--space-8) var(--space-12);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+}
+.ds-field__control:focus-within { border-color: var(--color-focus-ring); box-shadow: 0 0 0 1px var(--color-focus-ring); }
+.ds-field__input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font: 400 14px/20px "Inter", system-ui, sans-serif;
+  color: var(--color-text-primary);
+}
+.ds-field__input::placeholder { color: var(--color-text-secondary); }
+.ds-field__unit { font: 400 14px/20px "Inter", system-ui, sans-serif; color: var(--color-text-secondary); }
+.ds-field__helper { font: 400 12px/16px "Inter", system-ui, sans-serif; color: var(--color-text-secondary); }
+
+.ds-field--error .ds-field__control { border-color: var(--color-status-alarm-fg); box-shadow: 0 0 0 1px var(--color-status-alarm-fg); }
+.ds-field--error .ds-field__helper { color: var(--color-status-alarm-fg); }
+
+.ds-field--disabled .ds-field__label { color: var(--color-text-secondary); }
+.ds-field--disabled .ds-field__control { background: var(--color-bg-subtle); }
+.ds-field--disabled .ds-field__input { cursor: not-allowed; color: var(--color-text-secondary); }
