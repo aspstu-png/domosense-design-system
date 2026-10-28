@@ -33,8 +33,10 @@
 .ds-button--ghost:active { background: var(--color-border-default); }
 
 .ds-button--danger { background: var(--color-status-alarm-solid); color: var(--color-text-on-accent); }
-.ds-button--danger:hover,
-.ds-button--danger:active { background: var(--color-status-alarm-fg); }
+/* Hover/Pressed затемняют solid-цвет: токен status/alarm/fg в тёмной теме светлый и даёт
+   белый текст на розовом фоне (контраст ~2:1). */
+.ds-button--danger:hover { background: color-mix(in srgb, var(--color-status-alarm-solid) 85%, #000); }
+.ds-button--danger:active { background: color-mix(in srgb, var(--color-status-alarm-solid) 72%, #000); }
 
 .ds-button--block { width: 100%; }
 

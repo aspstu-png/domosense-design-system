@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="components/input.css">
 <link rel="stylesheet" href="components/status.css">
 <link rel="stylesheet" href="components/dashboard.css">
+<link rel="stylesheet" href="components/ai-suggestion.css">
 <style>
   * { box-sizing: border-box; }
   body { margin: 0; background: var(--color-bg-canvas); color: var(--color-text-primary); font: 400 14px/20px "Inter", system-ui, sans-serif; }
@@ -40,6 +41,7 @@
     <symbol id="i-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></symbol>
     <symbol id="i-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></symbol>
     <symbol id="i-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></symbol>
+    <symbol id="i-sparkle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 17v4M17 19h4"/></symbol>
   </defs>
 </svg>
 
@@ -65,7 +67,7 @@
         <span class="caption">Ghost</span>
         <button class="ds-button ds-button--ghost">Кнопка</button><button class="ds-button ds-button--ghost" style="background:var(--color-bg-subtle)">Кнопка</button><button class="ds-button ds-button--ghost" style="background:var(--color-border-default)">Кнопка</button><button class="ds-button ds-button--ghost" style="outline:2px solid var(--color-focus-ring);outline-offset:2px">Кнопка</button><button class="ds-button ds-button--ghost" disabled>Кнопка</button><button class="ds-button ds-button--ghost" aria-busy="true">Выполняется…</button>
         <span class="caption">Danger</span>
-        <button class="ds-button ds-button--danger">Отвязать</button><button class="ds-button ds-button--danger" style="background:var(--color-status-alarm-fg)">Отвязать</button><button class="ds-button ds-button--danger" style="background:var(--color-status-alarm-fg)">Отвязать</button><button class="ds-button ds-button--danger" style="outline:2px solid var(--color-focus-ring);outline-offset:2px">Отвязать</button><button class="ds-button ds-button--danger" disabled>Отвязать</button><button class="ds-button ds-button--danger" aria-busy="true">Выполняется…</button>
+        <button class="ds-button ds-button--danger">Отвязать</button><button class="ds-button ds-button--danger" style="background:color-mix(in srgb, var(--color-status-alarm-solid) 85%, #000)">Отвязать</button><button class="ds-button ds-button--danger" style="background:color-mix(in srgb, var(--color-status-alarm-solid) 72%, #000)">Отвязать</button><button class="ds-button ds-button--danger" style="outline:2px solid var(--color-focus-ring);outline-offset:2px">Отвязать</button><button class="ds-button ds-button--danger" disabled>Отвязать</button><button class="ds-button ds-button--danger" aria-busy="true">Выполняется…</button>
       </div>
       <div class="row">
         <button class="ds-button ds-button--primary" type="button" id="demo-cmd"><svg><use href="#i-door"/></svg>Открыть двери</button>
@@ -101,6 +103,16 @@
     <div class="panel row">
       <span class="ds-badge ds-badge--alarm">Тревога</span><span class="ds-badge ds-badge--warning">Предупреждение</span><span class="ds-badge ds-badge--task">Задача</span><span class="ds-badge ds-badge--ok">Отработано</span><span class="ds-badge ds-badge--offline">Нет связи</span><span class="ds-badge ds-badge--ai">AI-подсказка</span>
     </div>
+  </section>
+
+  <section>
+    <h2 class="ds-text-heading-h2" style="margin:0">AI Suggestion · разбор тревоги</h2>
+    <p class="caption" style="margin:0">Переключайте пример ответа модели: при низкой уверенности компонент не предлагает шаги, а отправляет к регламенту.</p>
+    <div class="row" role="group" aria-label="Пример ответа модели">
+      <button class="ds-button ds-button--secondary" type="button" data-ai-demo="high">Уверенный ответ</button>
+      <button class="ds-button ds-button--secondary" type="button" data-ai-demo="low">Мало данных</button>
+    </div>
+    <div style="max-width:420px"><div class="ds-ai" id="ai" aria-live="polite"></div></div>
   </section>
 
   <section>
@@ -154,6 +166,29 @@
     thHelp.textContent = bad ? "Значение должно быть больше 0 °C" : "Тревога сработает выше этого значения";
   };
   th.addEventListener("input", validate); validate();
+
+  // AI Suggestion: analysing → high | low → feedback
+  const ai = document.getElementById("ai");
+  const head = (basis) => `<div class="ds-ai__head"><svg><use href="#i-sparkle"/></svg><span class="ds-ai__title">AI-разбор тревоги</span>${basis ? `<span class="ds-ai__basis">${basis}</span>` : ""}</div>`;
+  const disclaimer = '<div class="ds-ai__disclaimer">Подсказка AI. Решение принимает диспетчер, все действия пишутся в журнал.</div>';
+  const VIEWS = {
+    analysing: () => `${head()}<div>Смотрю телеметрию лифта за 2 часа и похожие события за 30 дней…</div><div class="ds-ai__skeleton" aria-hidden="true"><span></span><span></span><span></span></div><div class="ds-ai__disclaimer">Обычно до 5 секунд</div>`,
+    high: () => `${head("9 похожих случаев")}
+      <div><div class="ds-ai__label">Вероятная причина</div>Кабина остановилась на 60 мм выше уровня этажа — двери блокируются. Так было в 7 из 9 похожих случаев.</div>
+      <div class="ds-ai__steps"><div class="ds-ai__label">Что сделать</div><ol><li>Перезагрузить контроллер — кабина выровняется</li><li>Открыть двери удалённо</li></ol><span class="ds-ai__basis">Если не помогло — задача на выезд уже заполнена</span></div>
+      <div class="ds-ai__actions"><button class="ds-button ds-button--primary" type="button" data-ai="run">Выполнить шаги</button><button class="ds-button ds-button--ghost" type="button" data-ai="reject">Не подходит</button></div>${disclaimer}`,
+    low: () => `${head("2 похожих случая")}<div>Похожих случаев мало, уверенного вывода нет. Действуйте по регламенту для этой модели лифта.</div><button class="ds-button ds-button--secondary ds-button--block" type="button">Открыть регламент</button>${disclaimer}`,
+    feedback: () => `${head()}<div>Спасибо, учту. Что произошло на самом деле?</div><div class="ds-ai__chips"><button class="ds-ai__chip" type="button">Другая причина</button><button class="ds-ai__chip" type="button">Шаги не сработали</button><button class="ds-ai__chip" type="button">Нужен выезд</button></div>${disclaimer}`
+  };
+  const show = (state) => { ai.dataset.state = state; ai.innerHTML = VIEWS[state](); };
+  const analyse = (result) => { show("analysing"); setTimeout(() => show(result), 1200); };
+  document.querySelectorAll("[data-ai-demo]").forEach((b) => b.addEventListener("click", () => analyse(b.dataset.aiDemo)));
+  ai.addEventListener("click", (e) => {
+    const a = e.target.closest("[data-ai]"); if (!a) return;
+    if (a.dataset.ai === "reject") show("feedback");
+    if (a.dataset.ai === "run") { a.setAttribute("aria-busy", "true"); a.disabled = true; a.textContent = "Выполняется…"; setTimeout(() => { slot.innerHTML = '<div class="ds-toast ds-toast--success"><svg><use href="#i-check"/></svg><span class="ds-toast__text">Шаги выполнены: контроллер перезагружен, двери открыты</span><button class="ds-toast__action" type="button">Журнал</button></div>'; show("high"); slot.scrollIntoView({block:"center"}); }, 1400); }
+  });
+  analyse("high");
 </script>
 </body>
 </html>
